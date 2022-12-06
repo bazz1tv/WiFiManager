@@ -764,7 +764,7 @@ class WiFiManager
     
     // Set default debug level
     #ifndef WM_DEBUG_LEVEL
-    #define WM_DEBUG_LEVEL DEBUG_VERBOSE // development default, not release
+    #define WM_DEBUG_LEVEL DEBUG_DEV // development default, not release
     #endif
 
     // override debug level OFF
@@ -780,7 +780,7 @@ class WiFiManager
 
     // @todo use DEBUG_ESP_PORT ?
     #ifdef WM_DEBUG_PORT
-    Print& _debugPort = WM_DEBUG_PORT;
+    Print& _debugPort = Serial;
     #else
     Print& _debugPort = Serial; // debug output stream ref
     #endif
