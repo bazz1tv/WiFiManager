@@ -652,6 +652,7 @@ void WiFiManager::setupHTTPServer(){
   server->on(WM_G(R_close),      std::bind(&WiFiManager::handleClose, this));
   server->on(WM_G(R_erase),      std::bind(&WiFiManager::handleErase, this, false));
   server->on(WM_G(R_status),     std::bind(&WiFiManager::handleWiFiStatus, this));
+  server->on(WM_G(R_logo),       std::bind(&WiFiManager::handleLogo, this));
   server->onNotFound (std::bind(&WiFiManager::handleNotFound, this));
   
   server->on(WM_G(R_update), std::bind(&WiFiManager::handleUpdate, this));
@@ -1796,6 +1797,12 @@ void WiFiManager::handleWiFiStatus(){
     page = FPSTR(HTTP_JS);
   #endif
   HTTPSend(page);
+}
+
+void WiFiManager::handleLogo(){
+  //server->sendHeader("Content-Length", String(sizeof(logo_jpg)));
+  server->send_P(200, PSTR("image/png"), logo_jpg, sizeof(logo_jpg));
+  //webserver.send_P(200, PSTR("image/png"), logo_jpg, sizeof(logo_jpeg));
 }
 
 /** 

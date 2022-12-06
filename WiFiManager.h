@@ -658,6 +658,7 @@ class WiFiManager
 	void          handleUpdate();
 	void          handleUpdating();
 	void          handleUpdateDone();
+    void          handleLogo();
 
 
     // wifi platform abstractions
