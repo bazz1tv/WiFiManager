@@ -614,6 +614,12 @@ boolean WiFiManager::configPortalHasTimeout(){
     return false;
 }
 
+void WiFiManager::addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn)
+{
+  Endpoint ep = {endpoint, fn};
+  _customEndpoints.push_back(ep);
+}
+
 void WiFiManager::setupHTTPServer(){
 
   #ifdef WM_DEBUG_LEVEL
@@ -653,6 +659,9 @@ void WiFiManager::setupHTTPServer(){
   server->on(WM_G(R_erase),      std::bind(&WiFiManager::handleErase, this, false));
   server->on(WM_G(R_status),     std::bind(&WiFiManager::handleWiFiStatus, this));
   server->on(WM_G(R_logo),       std::bind(&WiFiManager::handleLogo, this));
+  for(auto ep :_customEndpoints ){
+    server->on(ep.endpoint, std::bind(&WiFiManager::handleCustomEndpoint, this, ep.fn));
+  }
   server->onNotFound (std::bind(&WiFiManager::handleNotFound, this));
   
   server->on(WM_G(R_update), std::bind(&WiFiManager::handleUpdate, this));
@@ -1948,6 +1957,31 @@ void WiFiManager::doParamSave(){
     _saveparamscallback();  // @CALLBACK
   }
    
+}
+
+void WiFiManager::handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn)
+{
+  #ifdef WM_DEBUG_LEVEL
+  //DEBUG_WM(DEBUG_VERBOSE, server->pathArg(0));
+  DEBUG_WM(DEBUG_VERBOSE, server->uri());
+  #endif
+  handleRequest();
+  String page = getHTTPHead(FPSTR(S_titleinfo)); // @token titleinfo
+  reportStatus(page);
+
+  #ifdef WM_DEBUG_LEVEL
+  DEBUG_WM(DEBUG_VERBOSE, F("Calling ep.fn()"));
+  #endif
+  fn(server, page);
+
+  if(_showBack) page += FPSTR(HTTP_BACKBTN);
+  page += FPSTR(HTTP_END);
+
+  HTTPSend(page);
+
+  #ifdef WM_DEBUG_LEVEL
+  DEBUG_WM(DEBUG_DEV,F("Sent custom endpoint"));
+  #endif
 }
 
 /** 

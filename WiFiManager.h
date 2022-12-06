@@ -474,6 +474,9 @@ class WiFiManager
     // get hostname helper
     String        getWiFiHostname();
 
+    void addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn);
+    void handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn);
+
 
     std::unique_ptr<DNSServer>        dnsServer;
 
@@ -491,6 +494,13 @@ class WiFiManager
     std::vector<const char *> _menuIdsParams  = {"wifi","param","info","exit"};
     std::vector<const char *> _menuIdsUpdate  = {"wifi","param","info","update","exit"};
     std::vector<const char *> _menuIdsDefault = {"wifi","info","exit","sep","update"};
+
+    struct Endpoint {
+        const char *endpoint;
+        std::function<void (std::unique_ptr<WebServer>&, String&)> fn;
+    };
+    std::vector<Endpoint> _customEndpoints;
+
 
     // ip configs @todo struct ?
     IPAddress     _ap_static_ip;
