@@ -1970,7 +1970,7 @@ void WiFiManager::handleCustomEndpoint(std::function<void (std::unique_ptr<WebSe
   reportStatus(page);
 
   #ifdef WM_DEBUG_LEVEL
-  DEBUG_WM(DEBUG_VERBOSE, F("Calling ep.fn()"));
+  //DEBUG_WM(DEBUG_DEV, F("Calling ep.fn()"));
   #endif
   fn(server, page);
 
@@ -1980,7 +1980,7 @@ void WiFiManager::handleCustomEndpoint(std::function<void (std::unique_ptr<WebSe
   HTTPSend(page);
 
   #ifdef WM_DEBUG_LEVEL
-  DEBUG_WM(DEBUG_DEV,F("Sent custom endpoint"));
+  //DEBUG_WM(DEBUG_DEV,F("Sent custom endpoint"));
   #endif
 }
 
