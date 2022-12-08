@@ -474,8 +474,8 @@ class WiFiManager
     // get hostname helper
     String        getWiFiHostname();
 
-    void addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn);
-    void handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn);
+    void addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch=false);
+    void handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch);
 
 
     std::unique_ptr<DNSServer>        dnsServer;
@@ -498,6 +498,7 @@ class WiFiManager
     struct Endpoint {
         const char *endpoint;
         std::function<void (std::unique_ptr<WebServer>&, String&)> fn;
+        bool scratch;
     };
     std::vector<Endpoint> _customEndpoints;
 

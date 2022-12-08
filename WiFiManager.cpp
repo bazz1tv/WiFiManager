@@ -614,9 +614,9 @@ boolean WiFiManager::configPortalHasTimeout(){
     return false;
 }
 
-void WiFiManager::addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn)
+void WiFiManager::addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch/*=false*/)
 {
-  Endpoint ep = {endpoint, fn};
+  Endpoint ep = {endpoint, fn, scratch};
   _customEndpoints.push_back(ep);
 }
 
@@ -660,7 +660,7 @@ void WiFiManager::setupHTTPServer(){
   server->on(WM_G(R_status),     std::bind(&WiFiManager::handleWiFiStatus, this));
   server->on(WM_G(R_logo),       std::bind(&WiFiManager::handleLogo, this));
   for(auto ep :_customEndpoints ){
-    server->on(ep.endpoint, std::bind(&WiFiManager::handleCustomEndpoint, this, ep.fn));
+    server->on(ep.endpoint, std::bind(&WiFiManager::handleCustomEndpoint, this, ep.fn, ep.scratch));
   }
   server->onNotFound (std::bind(&WiFiManager::handleNotFound, this));
   
@@ -1959,23 +1959,32 @@ void WiFiManager::doParamSave(){
    
 }
 
-void WiFiManager::handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn)
+void WiFiManager::handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch)
 {
   #ifdef WM_DEBUG_LEVEL
   //DEBUG_WM(DEBUG_VERBOSE, server->pathArg(0));
   DEBUG_WM(DEBUG_VERBOSE, server->uri());
   #endif
   handleRequest();
-  String page = getHTTPHead(FPSTR(S_titleinfo)); // @token titleinfo
-  reportStatus(page);
 
-  #ifdef WM_DEBUG_LEVEL
-  //DEBUG_WM(DEBUG_DEV, F("Calling ep.fn()"));
-  #endif
+  String page = "";
+  if (!scratch)
+  {
+    page = getHTTPHead(FPSTR(S_titleinfo)); // @token titleinfo
+    reportStatus(page);
+
+    #ifdef WM_DEBUG_LEVEL
+    //DEBUG_WM(DEBUG_DEV, F("Calling ep.fn()"));
+    #endif
+  }
+
   fn(server, page);
 
-  if(_showBack) page += FPSTR(HTTP_BACKBTN);
-  page += FPSTR(HTTP_END);
+  if (!scratch)
+  {
+    if(_showBack) page += FPSTR(HTTP_BACKBTN);
+    page += FPSTR(HTTP_END);
+  }
 
   HTTPSend(page);
 
