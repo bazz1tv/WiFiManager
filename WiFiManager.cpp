@@ -1345,9 +1345,9 @@ void WiFiManager::handleRoot() {
   str.replace(FPSTR(T_t),_title);
   str.replace(FPSTR(T_v),configPortalActive ? _apName : (getWiFiHostname() + " - " + WiFi.localIP().toString())); // use ip if ap is not active for heading @todo use hostname?
   page += str;
+  reportStatus(page);
   page += FPSTR(HTTP_PORTAL_OPTIONS);
   page += getMenuOut();
-  reportStatus(page);
   page += FPSTR(HTTP_END);
 
   HTTPSend(page);
@@ -1366,6 +1366,7 @@ void WiFiManager::handleWifi(boolean scan) {
   #endif
   handleRequest();
   String page = getHTTPHead(FPSTR(S_titlewifi)); // @token titlewifi
+  reportStatus(page);
   if (scan) {
     #ifdef WM_DEBUG_LEVEL
     // DEBUG_WM(DEBUG_DEV,"refresh flag:",server->hasArg(F("refresh")));
@@ -1403,7 +1404,6 @@ void WiFiManager::handleWifi(boolean scan) {
   page += FPSTR(HTTP_FORM_END);
   page += FPSTR(HTTP_SCAN_LINK);
   if(_showBack) page += FPSTR(HTTP_BACKBTN);
-  reportStatus(page);
   page += FPSTR(HTTP_END);
 
   HTTPSend(page);
