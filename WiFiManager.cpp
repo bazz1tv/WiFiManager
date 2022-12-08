@@ -688,7 +688,7 @@ void WiFiManager::setupDNSD(){
 void WiFiManager::setupConfigPortal() {
   setupHTTPServer();
   _lastscan = 0; // reset network scan cache
-  if(_preloadwifiscan) WiFi_scanNetworks(true,true); // preload wifiscan , async
+  if(configPortalActive && _preloadwifiscan) WiFi_scanNetworks(true,true); // preload wifiscan , async
 }
 
 boolean WiFiManager::startConfigPortal() {
@@ -1351,7 +1351,7 @@ void WiFiManager::handleRoot() {
   page += FPSTR(HTTP_END);
 
   HTTPSend(page);
-  if(_preloadwifiscan) WiFi_scanNetworks(_scancachetime,true); // preload wifiscan throttled, async
+  if(configPortalActive && _preloadwifiscan) WiFi_scanNetworks(_scancachetime,true); // preload wifiscan throttled, async
   // @todo buggy, captive portals make a query on every page load, causing this to run every time in addition to the real page load
   // I dont understand why, when you are already in the captive portal, I guess they want to know that its still up and not done or gone
   // if we can detect these and ignore them that would be great, since they come from the captive portal redirect maybe there is a refferer
