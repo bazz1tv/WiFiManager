@@ -474,6 +474,8 @@ class WiFiManager
     // get hostname helper
     String        getWiFiHostname();
 
+    void          setFirmwareVersion(const char *fv);
+
     void addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch=false);
     void handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch);
 
@@ -587,6 +589,7 @@ class WiFiManager
     const char*   _customMenuHTML         = ""; // store custom head element html from user inside <>
     String        _bodyClass              = ""; // class to add to body
     String        _title                  = FPSTR(S_brand); // app title -  default WiFiManager
+    const char*   _firmwareVersion        = "";
 
     // internal options
     

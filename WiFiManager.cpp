@@ -1455,6 +1455,13 @@ String WiFiManager::getMenuOut(){
     page += HTTP_PORTAL_MENU[menuId];
   }
 
+  if (_firmwareVersion != "")
+  {
+    page += "<div style='text-align:center'>version ";
+    page += _firmwareVersion;
+    page += "</div>";
+  }
+
   return page;
 }
 
@@ -3129,6 +3136,11 @@ String WiFiManager::getWiFiHostname(){
   #else
     return (String)WiFi.hostname();
   #endif
+}
+
+void WiFiManager::setFirmwareVersion(const char *fv)
+{
+  _firmwareVersion = fv;
 }
 
 /**
