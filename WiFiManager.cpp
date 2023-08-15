@@ -3151,6 +3151,11 @@ void WiFiManager::setFirmwareVersion(const char *fv)
   _firmwareVersion = fv;
 }
 
+void WiFiManager::setSSIDPrefix(const char *ssidpre)
+{
+  _wifissidprefix = ssidpre;
+}
+
 /**
  * [setTitle description]
  * @param String title, set app title

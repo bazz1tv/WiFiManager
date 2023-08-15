@@ -475,6 +475,7 @@ class WiFiManager
     String        getWiFiHostname();
 
     void          setFirmwareVersion(const char *fv);
+    void          setSSIDPrefix(const char *ssidpre);
 
     void addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch=false);
     void handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch);
