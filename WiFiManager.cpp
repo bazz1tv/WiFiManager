@@ -1875,8 +1875,16 @@ void WiFiManager::handleWifiSave() {
   String page;
 
   if(_ssid == ""){
-    page = getHTTPHead(FPSTR(S_titlewifisettings)); // @token titleparamsaved
-    page += FPSTR(HTTP_PARAMSAVED);
+    if (_paramsInWifi)
+    {
+      page = getHTTPHead(FPSTR(S_titlewifisettings)); // @token titleparamsaved
+      page += FPSTR(HTTP_PARAMSAVED);
+    }
+    else
+    {
+      page = getHTTPHead(FPSTR(S_error));
+      page += FPSTR(HTTP_SAVEDNOSSID);
+    }
   }
   else {
     page = getHTTPHead(FPSTR(S_titlewifisaved)); // @token titlewifisaved
