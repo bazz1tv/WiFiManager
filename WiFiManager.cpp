@@ -813,7 +813,7 @@ boolean  WiFiManager::startConfigPortal(char const *apName, char const *apPasswo
     // status change, break
     // @todo what is this for, should be moved inside the processor
     // I think.. this is to detect autoconnect by esp in background, there are also many open issues about autoreconnect not working
-    if(state != WL_IDLE_STATUS){
+    if(state == WL_CONNECTED){
         result = (state == WL_CONNECTED); // true if connected
         DEBUG_WM(DEBUG_DEV,F("configportal loop break"));
         break;
