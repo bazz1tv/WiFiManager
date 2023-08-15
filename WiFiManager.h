@@ -248,7 +248,7 @@ class WiFiManager
     void          stopWebPortal();
 
     // Run webserver processing, if setConfigPortalBlocking(false)
-    boolean       process();
+    int       process();
 
     // get the AP name of the config portal, so it can be used in the callback
     String        getConfigPortalSSID();

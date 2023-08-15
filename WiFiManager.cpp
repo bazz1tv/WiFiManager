@@ -833,9 +833,9 @@ boolean  WiFiManager::startConfigPortal(char const *apName, char const *apPasswo
 /**
  * [process description]
  * @access public
- * @return bool connected
+ * @return int state
  */
-boolean WiFiManager::process(){
+int WiFiManager::process(){
     // process mdns, esp32 not required
     #if defined(WM_MDNS) && defined(ESP8266)
     MDNS.update();
@@ -855,13 +855,13 @@ boolean WiFiManager::process(){
           #endif
           _configportaltimeoutcallback();  // @CALLBACK
         }
-        return false;
+        return -1;
       }
 
       uint8_t state = processConfigPortal(); // state is WL_IDLE or WL_CONNECTED/FAILED
-      return state == WL_CONNECTED;
+      return state;
     }
-    return false;
+    return -1;
 }
 
 /**
@@ -947,6 +947,7 @@ uint8_t WiFiManager::processConfigPortal(){
         #ifdef WM_DEBUG_LEVEL
         DEBUG_WM(DEBUG_VERBOSE,F("Processing - Disabling STA"));
         #endif
+        return WL_CONNECT_FAILED;
       }
       else{
         #ifdef WM_DEBUG_LEVEL
