@@ -476,6 +476,7 @@ class WiFiManager
 
     void          setFirmwareVersion(const char *fv);
     void          setSSIDPrefix(const char *ssidpre);
+    void          setHTTPSavedSubMsg(const char *msg);
 
     void addCustomEndpoint(const char *endpoint, std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch=false);
     void handleCustomEndpoint(std::function<void (std::unique_ptr<WebServer>&, String&)> fn, bool scratch);
@@ -591,6 +592,7 @@ class WiFiManager
     String        _bodyClass              = ""; // class to add to body
     String        _title                  = FPSTR(S_brand); // app title -  default WiFiManager
     const char*   _firmwareVersion        = "";
+    String        _httpSavedSubMsg        = FPSTR(HTTP_SAVED_SUBMSG);
 
     // internal options
     

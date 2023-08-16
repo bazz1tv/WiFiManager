@@ -1891,6 +1891,7 @@ void WiFiManager::handleWifiSave() {
   else {
     page = getHTTPHead(FPSTR(S_titlewifisaved)); // @token titlewifisaved
     page += FPSTR(HTTP_SAVED);
+    page += _httpSavedSubMsg;
   }
 
   if(_showBack) page += FPSTR(HTTP_BACKBTN);
@@ -3156,6 +3157,11 @@ void WiFiManager::setFirmwareVersion(const char *fv)
 void WiFiManager::setSSIDPrefix(const char *ssidpre)
 {
   _wifissidprefix = ssidpre;
+}
+
+void WiFiManager::setHTTPSavedSubMsg(const char *msg)
+{
+  _httpSavedSubMsg = msg;
 }
 
 /**
