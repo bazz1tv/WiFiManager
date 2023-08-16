@@ -893,6 +893,7 @@ uint8_t WiFiManager::processConfigPortal(){
         #ifdef WM_DEBUG_LEVEL
         DEBUG_WM(DEBUG_VERBOSE,F("No ssid, skipping wifi save"));
         #endif
+        return WL_IDLE_STATUS;
       }
       else{
         // attempt sta connection to submitted _ssid, _pass
